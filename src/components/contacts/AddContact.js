@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import TextInputGroup from '../layout/TextInputGroup';
+import { connect } from 'react-redux';
+import { addContact } from '../../actions/contactActions';
+import PropTypes from 'prop-types';
 
 class AddContact extends Component {
   state = {
@@ -9,7 +12,7 @@ class AddContact extends Component {
     errors: {}
   };
 
-  onSubmit = (e) => {
+  onSubmit = e => {
     e.preventDefault();
 
     const { name, email, phone } = this.state;
@@ -36,9 +39,9 @@ class AddContact extends Component {
       phone
     };
 
-    //// SUBMIT CONTACT ////
+    const promise = this.props.addContact(newContact);
+    promise.then(res => {});
 
-    // Clear State
     this.setState({
       name: '',
       email: '',
@@ -84,11 +87,7 @@ class AddContact extends Component {
               onChange={this.onChange}
               error={errors.phone}
             />
-            <input
-              type="submit"
-              value="Add Contact"
-              className="btn btn-light btn-block"
-            />
+            <input type="submit" value="Add Contact" className="btn btn-light btn-block" />
           </form>
         </div>
       </div>
@@ -96,4 +95,13 @@ class AddContact extends Component {
   }
 }
 
-export default AddContact;
+AddContact.propTypes = {
+  addContact: PropTypes.func.isRequired
+};
+
+export default connect(
+  null,
+  {
+    addContact
+  }
+)(AddContact);
